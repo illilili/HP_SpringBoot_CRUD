@@ -6,10 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity //DB가 인식
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class Article {
 
@@ -22,5 +24,7 @@ public class Article {
 
     @Column
     private String content;
+
+
 
 }
