@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 @Slf4j
 public class ArticleController {
@@ -39,7 +42,7 @@ public class ArticleController {
         //System.out.println(saved.toString());
         log.info(saved.toString());
 
-        return "";
+        return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}")
@@ -54,6 +57,52 @@ public class ArticleController {
 
         // 3. 보여줄 페이지 설정
         return "articles/show";
+    }
+
+    @GetMapping("/articles")
+    public String index(Model model) {
+
+        // 1. 모든 아티클을 가져옴
+        List<Article> articleEntityList = articleRepository.findAll();
+
+        // 2. 가져온 아티클 묶음 뷰로 전달
+        model.addAttribute("articleList", articleEntityList);
+
+        // 3. 뷰 페이지
+        return "articles/index";
+    }
+
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id, Model model){
+        // 수정할 데이터 가져오기
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+
+        model.addAttribute("article", articleEntity);
+
+        return "articles/edit";
+
+    }
+
+    @PostMapping("articles/update")
+    public String update(ArticleForm form) {
+        log.info(form.toString());
+
+        // 1. DTO를 엔티티로
+        Article articleEntity = form.toEntity();
+        log.info(articleEntity.toString());
+
+
+        // 2. 엔티티 db 저장
+        // 기존 데이터 가져오기
+        Article target =  articleRepository.findById(articleEntity.getId()).orElse(null);
+
+        // 수정
+        if (target != null) {
+            articleRepository.save(articleEntity);
+        }
+
+
+        return "redirect:/articles/" + articleEntity.getId();
     }
 
 
