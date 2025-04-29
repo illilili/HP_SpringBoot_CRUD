@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 public class ArticleController {
 
-    private static final Logger log = LoggerFactory.getLogger(ArticleController.class);
+    public static final Logger log = LoggerFactory.getLogger(ArticleController.class);
     @Autowired // 스프링부트가 생성해둔 객체 자동 연결
     private ArticleRepository articleRepository;
 
